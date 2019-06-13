@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: jira-software
+  name: jira-software
+  namespace: atlassian-jira
+spec:
+  rules:
+  - host: jira.k8s-srini.s3labs.com
+    http:
+      paths:
+      - backend:
+          serviceName: jira-software
+          servicePort: http
+        path: /   

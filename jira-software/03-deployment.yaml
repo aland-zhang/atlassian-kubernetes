@@ -1,54 +1,23 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  labels:
-    app: atlassian-jira-software
-  name: atlassian-jira-software
-  namespace: devops
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 8Gi
-  storageClassName: gp2
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: atlassian-jira-software
-  name: atlassian-jira-software
-  namespace: devops
-spec:
-  ports:
-  - name: http
-    port: 8080
-    protocol: TCP
-    targetPort: http
-  selector:
-    app: atlassian-jira-software
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: atlassian-jira-software
-  name: atlassian-jira-software
-  namespace: devops
+    app: jira-software
+  name: jira-software
+  namespace: atlassian-jira
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: atlassian-jira-software
+      app: jira-software
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: atlassian-jira-software
+        app: jira-software
     spec:
       containers:
       - env:
@@ -61,7 +30,7 @@ spec:
         - name: JAVA_OPTS
           value: -Xmx1536m -Xms1536m -XX:MaxMetaspaceSize=512m -XX:MaxDirectMemorySize=10m
             -Djira.websudo.is.disabled=true
-        image: cptactionhank/atlassian-jira-software:7.10.1
+        image: cptactionhank/jira-software:7.10.1
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
@@ -71,7 +40,7 @@ spec:
           tcpSocket:
             port: http
           timeoutSeconds: 3
-        name: atlassian-jira-software
+        name: jira-software
         ports:
         - containerPort: 8080
           name: http
@@ -116,21 +85,4 @@ spec:
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: atlassian-jira-software
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  labels:
-    app: atlassian-jira-software
-  name: atlassian-jira-software
-  namespace: devops
-spec:
-  rules:
-  - host: jira.k8s-srini.s3labs.com
-    http:
-      paths:
-      - backend:
-          serviceName: atlassian-jira-software
-          servicePort: http
-        path: /   
+          claimName: jira-software

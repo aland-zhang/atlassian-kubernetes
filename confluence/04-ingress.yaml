@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: confluence
+  name: confluence
+  namespace: atlassian-confluence
+spec:
+  rules:
+  - host: confluence.k8s-srini.s3labs.com
+    http:
+      paths:
+      - backend:
+          serviceName: confluence
+          servicePort: http
+        path: /
+      - backend:
+          serviceName: confluence
+          servicePort: synchrony
+        path: /synchrony    

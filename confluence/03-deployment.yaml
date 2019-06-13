@@ -1,58 +1,23 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  labels:
-    app: atlassian-confluence
-  name: atlassian-confluence
-  namespace: devops
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 8Gi
-  storageClassName: gp2
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: atlassian-confluence
-  name: atlassian-confluence
-  namespace: devops
-spec:
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: http
-  - name: synchrony
-    port: 8091
-    protocol: TCP
-    targetPort: synchrony
-  selector:
-    app: atlassian-confluence
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: atlassian-confluence
-  name: atlassian-confluence
-  namespace: devops
+    app: confluence
+  name: confluence
+  namespace: atlassian-confluence
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: atlassian-confluence
+      app: confluence
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: atlassian-confluence
+        app: confluence
     spec:
       containers:
       - env:
@@ -80,7 +45,7 @@ spec:
           tcpSocket:
             port: http
           timeoutSeconds: 3
-        name: atlassian-confluence
+        name: confluence
         ports:
         - containerPort: 8090
           name: http
@@ -113,25 +78,4 @@ spec:
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: atlassian-confluence
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  labels:
-    app: atlassian-confluence
-  name: atlassian-confluence
-  namespace: devops
-spec:
-  rules:
-  - host: confluence.k8s-srini.s3labs.com
-    http:
-      paths:
-      - backend:
-          serviceName: atlassian-confluence
-          servicePort: http
-        path: /
-      - backend:
-          serviceName: atlassian-confluence
-          servicePort: synchrony
-        path: /synchrony    
+          claimName: confluence
