@@ -1,0 +1,18 @@
+[submodule "atlassian-crowd"]
+	path = atlassian-crowd
+	url = https://github.com/srinisbook/atlassian-crowd.git
+[submodule "atlassian-jira-service-desk"]
+	path = atlassian-jira-service-desk
+	url = https://github.com/srinisbook/atlassian-jira-service-desk.git
+[submodule "atlassian-jira-software"]
+	path = atlassian-jira-software
+	url = https://github.com/srinisbook/atlassian-jira-software.git
+[submodule "atlassian-confluence"]
+	path = atlassian-confluence
+	url = https://github.com/srinisbook/atlassian-confluence.git
+[submodule "atlassian-bitbucket"]
+	path = atlassian-bitbucket
+	url = https://github.com/srinisbook/atlassian-bitbucket.git
+[submodule "atlassian-bamboo"]
+	path = atlassian-bamboo
+	url = https://github.com/srinisbook/atlassian-bamboo.git
